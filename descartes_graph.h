@@ -141,19 +141,24 @@ inline std::vector<std::vector<double>> makeSolutions(int n, int dof)
 }
 
 inline std::vector<EdgeList> computeEdges(const std::vector<double>& from,
-                                   const std::vector<double>& to, 
-                                   const size_t dof)
+                                         const std::vector<double>& to, 
+                                         const size_t dof)
 {
   const auto from_size = from.size();
   const auto to_size = to.size();
 
-  std::vector<EdgeList> edges (from_size);
+  std::vector<EdgeList> edges (from_size / dof);
 
-  static EdgeList edge_scratch (to_size);
+  EdgeList edge_scratch (to_size / dof);
+  // std::cout << "FROM: " << from_size / dof << "\n";
+  // std::cout << "TO: " << to_size / dof << "\n";
   
   for (size_t i = 0; i < from_size; i += dof) // from rung
   {
+    // std::cout << "RUNG" << i << "\n";
     size_t count = 0;
+    unsigned idx = 0;
+
     for (size_t j = 0; j < to_size; j += dof) // to rung
     {
       double cost = 0.0;
@@ -161,11 +166,21 @@ inline std::vector<EdgeList> computeEdges(const std::vector<double>& from,
       {
         cost += std::abs(from[i + k] - to[j + k]);
       }
-      edge_scratch[count++] = {cost, j / dof};
+      // std::cout << "\tWriting " << count << "\n";
+      edge_scratch[count++] = {cost, idx};
+      idx++;
     }
-    edges[i] = EdgeList(edge_scratch.begin(), edge_scratch.begin() + count);
+
+    // std::cout << "INSERT: " << i << " vs " << edges.size() << " \n";
+    edges[i/dof] = EdgeList(edge_scratch.begin(), edge_scratch.begin() + count);
   }
   return edges;
+}
+
+inline void testPrint(const DescartesGraph& graph)
+{
+
+
 }
 
 #endif //DESCARTES_GRAPH_H

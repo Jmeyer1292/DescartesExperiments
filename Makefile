@@ -1,5 +1,5 @@
 CC := g++
-CXX_FlAGS := -Wall -Wextra -O0 -std=c++11
+CXX_FlAGS := -Wall -Wextra -O3 -std=c++11
 SRCS := descartes_graph.cpp main.cpp dijkstras_search.cpp
 BIN_NAME := graph
 

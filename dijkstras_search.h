@@ -22,7 +22,7 @@ class DijkstrasSearch
 public:
   DijkstrasSearch(DescartesGraph& graph);
 
-  bool run();
+  std::pair<unsigned, double> run(int n);
 
 private:
   const DescartesGraph& graph_;
